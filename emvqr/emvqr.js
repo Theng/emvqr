@@ -13,19 +13,19 @@ let debug = { log: o => o };
 function decode(emvString) {
     const emvObject = {};
 
-    // parse emv string
-    let inputText = emvString;
-    while(inputText.length > 0){
-        debug.log('inputText', inputText);
-        let { emvItem, remainingText } = readNext(inputText);
-        emvObject[emvItem.id] = emvItem;
-        inputText = remainingText;
-    }
-
     // validate checksum
     if(!validateChecksum(emvString)){
         throw new Error('checksum validation failed.');
-    };
+    }else{
+        // parse emv string
+        let inputText = emvString;
+        while(inputText.length > 0){
+            debug.log('inputText', inputText);
+            let { emvItem, remainingText } = readNext(inputText);
+            emvObject[emvItem.id] = emvItem;
+            inputText = remainingText;
+        }
+    }
 
     return emvObject;
 }
